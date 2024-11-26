@@ -1,0 +1,38 @@
+version: '3'
+services:
+  nogociator-api_aden_org:
+    build:
+      context: .
+      dockerfile:
+        Dockerfile
+    ports:
+      - "8004:3000"
+    restart: on-failure
+    container_name: nogociator-api_aden_org
+    image: matiascorvalan24/nogociator-api_aden_org
+    depends_on:
+      - db
+    links:
+      - db
+  
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    volumes:
+      - 'nogociator-api-db-data:/var/lib/mysql'
+    environment:
+      MYSQL_ROOT_PASSWORD: h0m3r0
+      MYSQL_USER: datosweb
+      MYSQL_PASSWORD: h0m3r0
+      MYSQL_DATABASE: ADEN_apisim
+      
+
+  adminer:
+    image: adminer
+    restart: unless-stopped
+    ports:
+      - 8006:8080
+
+volumes:
+  nogociator-api-db-data:
